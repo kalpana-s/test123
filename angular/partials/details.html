@@ -1,0 +1,13 @@
+<section class="artistinfo">
+	<div class="artist cf" ng-model="artists">
+		<h1>{{artists[whichItem].name}}</h1>
+	</div>
+	<ul>
+		<li ng-click="showMe('div1',1)">Tile 1</li>
+		<li>Tile 2</li>
+		<li>Tile 3</li>
+	</ul>
+	<div ng-show="finalIndex" id="div1">Tile 1 content</div>
+	<div ng-show="finalIndex" id="div2">Tile 2 content</div>
+	<div ng-show="finalIndex" id="div3">Tile 3 content</div>
+</section>
