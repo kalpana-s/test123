@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<title>React Tutorial</title>
+<script src="https://fb.me/react-0.14.3.min.js"></script>
+<script src="https://fb.me/react-dom-0.14.0.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+ <style>
+.note{
+    border:1px solid #CCC;
+    height:150px;
+    width:150px;
+    background:#CCFF99;margin-bottom:15px;
+}
+ </style>
+<body>
+<!--<script>
+        React.render(React.createElement('div', null, 'Hello World...'), document.body);
+</script>-->
+<div id="note" style="background:#F0F0F0;height:100%; width:100%;"></div>
+<script type="text/babel">
+        var Note = React.createClass({
+                edit: function(){
+                        this.setState({editing:true});
+                },
+                del: function(){
+                        this.props.onRemove(this.props.index);
+                },
+                getInitialState: function(){
+                        return ({checked: true, editing:false})
+                },
+                handleCheck: function(){
+                        this.setState({checked:!this.state.checked})
+                },
+                save: function(){
+                    var val=this.refs.newVal.getDOMNode().value;
+                    this.props.onChange(val, this.props.index);
+                    this.setState({editing:false});
+                },
+                showPage: function(){
+                    return (
+                                <div className="note">
+                                 <p>{this.props.children}</p>
+                                 <input type="button" onClick={this.edit} value="edit" />
+                                 <input type="button" onClick={this.del} value="del" />
+                                 <input type="checkbox" onChange={this.handleCheck} checked={this.state.checked} />
+                                </div>
+                        );
+                },
+                renderEdit: function(){
+                    return (<div>
+                                <textarea ref="newVal" defaultValue={this.props.children}></textarea>
+                                <input type="button" onClick={this.save} value="Save" />
+                            </div>);
+                },
+                render: function(){
+                        var msg;
+                        if( this.state.checked){
+                            msg = 'checked';    
+                        } else{
+                             msg = 'Unchecked';  
+                        }
+                        if(this.state.editing){
+                            return this.renderEdit();
+                        } else{
+                            return this.showPage();
+                        }
+                        
+                }
+        });
+        
+        var Board = React.createClass({
+            getInitialState: function(){
+                return{
+                    notes: [
+                        'pay ebill'
+                    ]
+                };
+            },
+            eachNote: function(note, i){
+                return(<Note key={i} index={i} onChange={this.update} onRemove={this.remove}>{note}</Note>);
+            },
+            update: function(newValue, i){
+                var arr = this.state.notes;
+                arr[i] = newValue;
+                this.setState({notes:arr});
+            },
+            remove: function(i){
+                var arr = this.state.notes;
+                arr.splice(i, 1);
+                this.setState({notes:arr});
+            },
+            add: function(text){
+                //alert(this.state.notes);
+                var arr = this.state.notes;
+                arr.push(text);
+
+                this.setState({notes:arr});
+                //alert(this.state.notes);
+            },
+            render: function(){
+                return(<div>
+                            {this.state.notes.map(this.eachNote)};
+                            <input type="button" onClick={this.add.bind(null, 'new note')} value="add" />
+                        </div>
+                );
+            }
+        });
+        ReactDOM.render(<Board />, document.getElementById('note'));
+</script>
+
+</body>
+</html>
